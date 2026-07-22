@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "../../components/site-footer";
 import { SiteHeader } from "../../components/site-header";
 import { allPlayers, getPlayerBySlug, players } from "../../../lib/players";
+import styles from "./profile.module.css";
 
 type PlayerProfileProps = {
   params: Promise<{ slug: string }>;
@@ -80,6 +81,25 @@ export default async function PlayerProfile({ params }: PlayerProfileProps) {
           </div>
         </div>
       </section>
+
+      {player.handicap ? (
+        <section className={`${styles.handicapCard} section-shell`} aria-labelledby="handicap-title">
+          <div className="section-header compact">
+            <div>
+              <p className="eyebrow">Year Three / Handicap card</p>
+              <h2 id="handicap-title">Playing<br /><em>numbers.</em></h2>
+            </div>
+            <p>Official 2026 Bourbon Bowl handicap card for the Blue tees. Strokes are shown off the low player.</p>
+          </div>
+          <div className={styles.handicapGrid}>
+            <div><strong>{player.handicap.tee}</strong><span>Tee</span></div>
+            <div><strong>{player.handicap.handicapIndex.toFixed(1)}</strong><span>Handicap index</span></div>
+            <div><strong>{player.handicap.courseHandicap}</strong><span>Course handicap</span></div>
+            <div><strong>{player.handicap.playingHandicap}</strong><span>Playing handicap</span></div>
+            <div><strong>{player.handicap.strokesOff}</strong><span>Strokes off</span></div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="profile-history section-shell">
         <div className="section-header compact">

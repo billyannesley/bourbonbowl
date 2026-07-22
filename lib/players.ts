@@ -13,6 +13,15 @@ export type Championship = {
   team: string;
 };
 
+export type PlayerHandicap = {
+  year: 2026;
+  tee: "Blue";
+  handicapIndex: number;
+  courseHandicap: number;
+  playingHandicap: number;
+  strokesOff: number;
+};
+
 export type Player = {
   name: string;
   initials: string;
@@ -22,6 +31,7 @@ export type Player = {
   teams: PlayerTeam[];
   roles?: PlayerRole[];
   championships?: Championship[];
+  handicap?: PlayerHandicap;
   highlights?: string[];
   note?: string;
 };
@@ -43,6 +53,7 @@ export const players: Player[] = [
       { year: 2024, team: "Flex Beans" },
       { year: 2025, team: "Big Daddy’s" },
     ],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 3.6, courseHandicap: 5, playingHandicap: 5, strokesOff: 0 },
     highlights: ["Hole-in-one · Sherman No. 5"],
     note: "Hole-in-one · Sherman No. 5",
   },
@@ -58,9 +69,10 @@ export const players: Player[] = [
       { year: 2026, name: "To be announced" },
     ],
     roles: [{ year: 2025, label: "Playing captain · BMYP" }],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 15.6, courseHandicap: 20, playingHandicap: 20, strokesOff: 15 },
   },
   {
-    name: "Doug Yass",
+    name: "Douglas Yass",
     initials: "DY",
     slug: "doug-yass",
     image: "/images/doug_yass.png",
@@ -71,6 +83,7 @@ export const players: Player[] = [
       { year: 2026, name: "To be announced" },
     ],
     championships: [{ year: 2024, team: "Flex Beans" }],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 6.1, courseHandicap: 8, playingHandicap: 8, strokesOff: 3 },
   },
   {
     name: "Dirk Nicholas",
@@ -83,6 +96,7 @@ export const players: Player[] = [
       { year: 2025, name: "BMYP" },
       { year: 2026, name: "To be announced" },
     ],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 6.4, courseHandicap: 9, playingHandicap: 9, strokesOff: 4 },
   },
   {
     name: "Matt Lipson",
@@ -96,6 +110,7 @@ export const players: Player[] = [
       { year: 2026, name: "To be announced" },
     ],
     championships: [{ year: 2025, team: "Big Daddy’s" }],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 6.7, courseHandicap: 9, playingHandicap: 9, strokesOff: 4 },
   },
   {
     name: "John Lynch",
@@ -105,6 +120,7 @@ export const players: Player[] = [
     years: [2026],
     teams: [{ year: 2026, name: "To be announced" }],
     roles: [{ year: 2024, label: "Non-playing captain" }],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 25.7, courseHandicap: 34, playingHandicap: 34, strokesOff: 29 },
     note: "2024 non-playing captain",
   },
   {
@@ -119,6 +135,7 @@ export const players: Player[] = [
       { year: 2026, name: "To be announced" },
     ],
     championships: [{ year: 2024, team: "Flex Beans" }],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 12.0, courseHandicap: 16, playingHandicap: 16, strokesOff: 11 },
   },
   {
     name: "Balt Heldring",
@@ -131,6 +148,7 @@ export const players: Player[] = [
       { year: 2026, name: "To be announced" },
     ],
     championships: [{ year: 2025, team: "Big Daddy’s" }],
+    handicap: { year: 2026, tee: "Blue", handicapIndex: 5.8, courseHandicap: 8, playingHandicap: 8, strokesOff: 3 },
   },
   {
     name: "Jack Rosenberg",

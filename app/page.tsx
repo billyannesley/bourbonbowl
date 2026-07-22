@@ -218,7 +218,7 @@ export default function Home() {
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <Image src={player.image} alt="" width={46} height={46} sizes="46px" />
                   <strong>{player.name}</strong>
-                  <abbr title={player.name}>{player.initials}</abbr>
+                  <abbr title={`${player.name} playing handicap`}>PH {player.handicap?.playingHandicap}</abbr>
                 </Link>
               </li>
             ))}
@@ -360,7 +360,7 @@ export default function Home() {
                 <span>{String(index + 1).padStart(2, "0")}</span>
                 <Image src={player.image} alt="" width={64} height={64} sizes="64px" />
                 <div><h3>{player.name}</h3>{player.note ? <small>{player.note}</small> : null}</div>
-                <p>{player.years.join(" · ")}</p>
+                <p>{player.handicap ? `2026 · ${player.handicap.tee} · PH ${player.handicap.playingHandicap}` : player.years.join(" · ")}</p>
                 <b>{player.years.length}</b>
               </Link>
             </article>
