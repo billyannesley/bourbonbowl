@@ -85,6 +85,25 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .appearance:hover small { color: var(--ink); }
 .appearance > b { font-family: Georgia, "Times New Roman", serif; font-size: 24px; font-weight: 400; }
 
+.venue { min-height: 760px; display: grid; grid-template-columns: .92fr 1.08fr; border-bottom: 1px solid var(--ink); }
+.venue-brand { min-width: 0; padding: clamp(80px, 10vw, 150px) var(--gutter) 54px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--ink); background: var(--soft); }
+.venue-brand > img { width: 100%; height: auto; }
+.venue-brand .eyebrow { margin-bottom: auto; }
+.venue-address { margin: auto 0 0; padding-top: 58px; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.venue-content { min-width: 0; padding: clamp(80px, 10vw, 150px) var(--gutter) 70px; display: flex; flex-direction: column; background: var(--acid); }
+.venue-content .eyebrow { color: var(--ink); }
+.venue-content h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(66px, 7.5vw, 126px); font-weight: 400; line-height: .82; letter-spacing: -.065em; }
+.venue-content h2 em { font-weight: 400; }
+.venue-lead { max-width: 720px; margin: 54px 0 66px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(22px, 2.2vw, 34px); line-height: 1.14; }
+.venue-facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.venue-facts div { min-height: 120px; padding: 20px 20px 16px 0; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--ink); }
+.venue-facts div + div { padding-left: 20px; }
+.venue-facts div:last-child { border-right: 0; }
+.venue-facts strong { font-family: Georgia, "Times New Roman", serif; font-size: clamp(36px, 4vw, 62px); font-weight: 400; line-height: .8; }
+.venue-facts span { font-size: 9px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.venue-link { align-self: flex-start; margin-top: 54px; padding-bottom: 8px; display: inline-flex; align-items: center; gap: 18px; border-bottom: 1px solid var(--ink); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; transition: gap .2s ease; }
+.venue-link:hover, .venue-link:focus-visible { gap: 26px; outline: none; }
+
 .section-header { margin-bottom: clamp(70px, 9vw, 130px); display: grid; grid-template-columns: 1fr minmax(300px, 520px); align-items: end; gap: 60px; }
 .section-header h2 { font-size: clamp(62px, 7vw, 118px); }
 .section-header > p { margin: 0; padding-bottom: 10px; font-size: clamp(16px, 1.4vw, 21px); line-height: 1.5; color: var(--muted); }
@@ -203,6 +222,8 @@ footer > span { justify-self: end; font-size: 11px; letter-spacing: .16em; }
   .hero-copy { min-height: 760px; }
   .field-card { min-height: 760px; }
   .current-year { grid-template-columns: 1fr; }
+  .venue { grid-template-columns: 1fr; }
+  .venue-brand { min-height: 620px; border-right: 0; border-bottom: 1px solid var(--ink); }
   .section-header { grid-template-columns: 1fr; align-items: start; }
   .rounds-grid { grid-template-columns: 1fr; }
   .round-card, .round-card + .round-card { padding: 30px 0; border-left: 0; border-top: 1px solid var(--rule); }
@@ -232,6 +253,15 @@ footer > span { justify-self: end; font-size: 11px; letter-spacing: .16em; }
   .field-card { min-height: auto; padding-bottom: 70px; }
   .field-list li a { min-height: 64px; }
   .motto { margin-top: 50px; }
+  .venue-brand { min-height: 430px; padding-top: 74px; padding-bottom: 42px; }
+  .venue-address { padding-top: 44px; line-height: 1.5; }
+  .venue-content { padding-top: 82px; padding-bottom: 82px; }
+  .venue-content h2 { font-size: clamp(56px, 17vw, 78px); }
+  .venue-lead { margin: 38px 0 48px; }
+  .venue-facts div { min-height: 96px; padding-left: 10px; }
+  .venue-facts div:first-child { padding-left: 0; }
+  .venue-facts strong { font-size: 36px; }
+  .venue-link { line-height: 1.4; }
   .section-shell { padding-top: 90px; padding-bottom: 90px; }
   .section-intro h2, .section-header h2 { font-size: clamp(58px, 18vw, 84px); }
   .team-grid { grid-template-columns: 1fr; }
