@@ -122,6 +122,30 @@ button, a { -webkit-tap-highlight-color: transparent; }
   flex-direction: column;
   overflow: hidden;
 }
+.field-card.standalone {
+  height: auto;
+  min-height: auto;
+  border-left: 0;
+  border-top: 1px solid var(--ink);
+  overflow: visible;
+}
+.field-card.standalone .field-list { overflow: visible; }
+.field-card.standalone .field-list li { flex: 0 0 auto; }
+.section-cta {
+  margin: 40px 0 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.ace-record + .section-cta { margin-top: 48px; }
+.year-page-intro { padding-bottom: 48px; border-bottom: 0; }
+.section-cta a {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ink);
+  transition: border-color .2s ease;
+}
+.section-cta a:hover, .section-cta a:focus-visible { border-color: var(--acid); outline: none; }
 .field-heading {
   flex-shrink: 0;
   display: flex;
@@ -264,7 +288,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .history-jump {
   margin: 0 0 clamp(70px, 8vw, 110px);
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
   border-bottom: 1px solid var(--ink);
 }
@@ -279,9 +303,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   transition: background .2s ease, transform .2s ease;
 }
 .history-jump a:last-child { border-right: 0; }
-.history-jump a:hover, .history-jump a:focus-visible { background: var(--acid); outline: none; transform: translateY(-3px); }
+.history-jump a:hover, .history-jump a:focus-visible,
+.history-jump a[aria-current="page"] { background: var(--acid); outline: none; transform: translateY(-3px); }
+.history-jump a[aria-current="page"] { transform: none; }
 .history-jump small { grid-column: 1 / -1; font-size: 9px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-.history-jump a:hover small, .history-jump a:focus-visible small { color: var(--ink); }
+.history-jump a:hover small, .history-jump a:focus-visible small,
+.history-jump a[aria-current="page"] small { color: var(--ink); }
 .history-jump b { align-self: end; font-family: Georgia, "Times New Roman", serif; font-size: clamp(42px, 5vw, 72px); font-weight: 400; letter-spacing: -.05em; line-height: .85; }
 .history-jump span { grid-column: 1 / -1; font-size: 12px; color: var(--muted); }
 
@@ -978,7 +1005,15 @@ footer > span { justify-self: end; font-size: 11px; letter-spacing: .16em; }
   .hero-archive a { padding: 12px 8px; min-height: 104px; }
   .field-heading h2 { font-size: clamp(28px, 9vw, 40px); }
   .site-header nav a { font-size: 9px; letter-spacing: .06em; }
-  .history-jump { margin-bottom: 56px; }
+  .history-jump {
+    margin-bottom: 56px;
+    grid-template-columns: 1fr;
+  }
+  .history-jump a {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .history-jump a:last-child { border-bottom: 0; }
   .scorecard-sides .side-a, .scorecard-sides .side-b { font-size: 16px; }
   .archive-note { letter-spacing: .08em; }
   .schedule-days li { flex-wrap: wrap; min-height: 0; padding: 10px 0; }

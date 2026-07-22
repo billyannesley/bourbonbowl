@@ -160,9 +160,21 @@
   line-height: 1;
 }
 
+.who h2 > span {
+  padding: .04em .12em .08em;
+  background: var(--acid);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .who h2 em {
   font-style: italic;
   font-weight: 400;
+}
+
+.row:hover .who h2 > span,
+.row:focus-visible .who h2 > span {
+  background: var(--paper);
 }
 
 .who small {

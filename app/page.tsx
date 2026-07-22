@@ -1,290 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
+import { ArrowIcon } from "./components/arrow-icon";
 import { SiteFooter } from "./components/site-footer";
 import { SiteHeader } from "./components/site-header";
-import { allPlayers, currentField, getPlayerByName } from "../lib/players";
-
-type Match = {
-  time: string;
-  left: string;
-  right: string;
-};
-
-type Round = {
-  number: number;
-  format: string;
-  course: string;
-  holes: number;
-  matches: Match[];
-};
-
-type ArchiveTeam = {
-  name: string;
-  players: string[];
-};
-
-type Edition = {
-  year: number;
-  index: string;
-  champion: string;
-  captains: { names: string; note: string };
-  teams: [ArchiveTeam, ArchiveTeam];
-  rounds: Round[];
-};
-
-const rounds2024: Round[] = [
-  {
-    number: 1,
-    format: "Better Ball",
-    course: "Meade / Sherman",
-    holes: 18,
-    matches: [
-      { time: "10:10 AM", left: "Billy Annesley / Jack Rosenberg", right: "Joey Grubb / Andrew Somers" },
-      { time: "10:20 AM", left: "Matt Lipson / Dirk Nicholas", right: "Stephen Aitken / Douglas Yass" },
-    ],
-  },
-  {
-    number: 2,
-    format: "Two-Man Scramble",
-    course: "Sherman or Meade",
-    holes: 9,
-    matches: [
-      { time: "5:30 PM", left: "Billy Annesley / Dirk Nicholas", right: "Stephen Aitken / Andrew Somers" },
-      { time: "5:40 PM", left: "Matt Lipson / Jack Rosenberg", right: "Joey Grubb / Douglas Yass" },
-    ],
-  },
-  {
-    number: 3,
-    format: "Individual Match Play",
-    course: "Grant / Meade",
-    holes: 18,
-    matches: [
-      { time: "8:50 AM", left: "Dirk Nicholas", right: "Stephen Aitken" },
-      { time: "8:50 AM", left: "Jack Rosenberg", right: "Joey Grubb" },
-      { time: "9:00 AM", left: "Billy Annesley", right: "Andrew Somers" },
-      { time: "9:00 AM", left: "Matt Lipson", right: "Douglas Yass" },
-    ],
-  },
-];
-
-const rounds2025: Round[] = [
-  {
-    number: 1,
-    format: "Better Ball",
-    course: "Meade / Sherman",
-    holes: 18,
-    matches: [
-      { time: "11:00 AM", left: "Stephen Aitken / Phil Origlio", right: "Dirk Nicholas / Douglas Yass" },
-      { time: "11:10 AM", left: "Matt Lipson / Balt Heldring", right: "Billy Annesley / Joey Grubb" },
-    ],
-  },
-  {
-    number: 2,
-    format: "Two-Man Scramble",
-    course: "Grant / Sherman / Meade",
-    holes: 18,
-    matches: [
-      { time: "5:00 PM", left: "Stephen Aitken / Matt Lipson", right: "Dirk Nicholas / Billy Annesley" },
-      { time: "5:10 PM", left: "Balt Heldring / Phil Origlio", right: "Joey Grubb / Douglas Yass" },
-    ],
-  },
-  {
-    number: 3,
-    format: "Individual Match Play",
-    course: "Grant / Sherman",
-    holes: 18,
-    matches: [
-      { time: "11:00 AM", left: "Stephen Aitken", right: "Joey Grubb" },
-      { time: "11:00 AM", left: "Balt Heldring", right: "Dirk Nicholas" },
-      { time: "11:10 AM", left: "Matt Lipson", right: "Billy Annesley" },
-      { time: "11:10 AM", left: "Phil Origlio", right: "Douglas Yass" },
-    ],
-  },
-];
-
-const schedule2026 = [
-  {
-    date: "2026-07-24",
-    day: "Friday",
-    label: "July 24",
-    route: "Meade → Grant",
-    teeTimes: [
-      { label: "12:00 PM", dateTime: "2026-07-24T12:00" },
-      { label: "12:10 PM", dateTime: "2026-07-24T12:10" },
-    ],
-  },
-  {
-    date: "2026-07-25",
-    day: "Saturday",
-    label: "July 25",
-    route: "Sherman → Grant",
-    teeTimes: [
-      { label: "11:00 AM", dateTime: "2026-07-25T11:00" },
-      { label: "11:10 AM", dateTime: "2026-07-25T11:10" },
-    ],
-  },
-] as const;
-
-function ArrowIcon() {
-  return <span aria-hidden="true">↗</span>;
-}
-
-const editions: Edition[] = [
-  {
-    year: 2024,
-    index: "01",
-    champion: "Flex Beans",
-    captains: { names: "Phil Origlio & John Lynch", note: "Non-playing captains" },
-    teams: [
-      {
-        name: "Flex Beans",
-        players: ["Stephen Aitken", "Joey Grubb", "Andrew Somers", "Douglas Yass"],
-      },
-      {
-        name: "Down 2 Hang",
-        players: ["Billy Annesley", "Matt Lipson", "Dirk Nicholas", "Jack Rosenberg"],
-      },
-    ],
-    rounds: rounds2024,
-  },
-  {
-    year: 2025,
-    index: "02",
-    champion: "Big Daddy’s",
-    captains: { names: "Stephen Aitken & Billy Annesley", note: "Playing captains" },
-    teams: [
-      {
-        name: "Big Daddy’s",
-        players: ["Stephen Aitken", "Balt Heldring", "Matt Lipson", "Phil Origlio"],
-      },
-      {
-        name: "BMYP",
-        players: ["Billy Annesley", "Joey Grubb", "Dirk Nicholas", "Douglas Yass"],
-      },
-    ],
-    rounds: rounds2025,
-  },
-];
-
-function LinkedNames({ names }: { names: string }) {
-  const parts = names.split(" / ");
-
-  return (
-    <>
-      {parts.map((name, index) => {
-        const player = getPlayerByName(name);
-        const label = player ? (
-          <Link href={`/players/${player.slug}`}>{name}</Link>
-        ) : (
-          <span>{name}</span>
-        );
-
-        return (
-          <Fragment key={`${name}-${index}`}>
-            {index > 0 ? <i aria-hidden="true"> / </i> : null}
-            {label}
-          </Fragment>
-        );
-      })}
-    </>
-  );
-}
-
-function YearEdition({ edition }: { edition: Edition }) {
-  const matchCount = edition.rounds.reduce((total, round) => total + round.matches.length, 0);
-
-  return (
-    <article className="year-record" id={`year-${edition.year}`}>
-      <header className="edition-masthead">
-        <div className="edition-year">
-          <p className="eyebrow">Archive / {edition.index}</p>
-          <h3>{edition.year}</h3>
-          <p className="edition-summary">
-            {edition.rounds.length} rounds · {matchCount} matches · 2 teams
-          </p>
-        </div>
-        <div className="edition-champion">
-          <span>Champion</span>
-          <strong>{edition.champion}</strong>
-        </div>
-      </header>
-
-      <div className="team-faceoff" aria-label={`${edition.year} teams`}>
-        {edition.teams.map((team, index) => {
-          const won = team.name === edition.champion;
-
-          return (
-            <Fragment key={team.name}>
-              {index === 1 ? (
-                <div className="faceoff-divider" aria-hidden="true">
-                  <span>vs</span>
-                </div>
-              ) : null}
-              <div className={`faceoff-side${won ? " winner" : ""}`}>
-                <p className="faceoff-result">{won ? "Champion" : "Runner-up"}</p>
-                <h4 className="faceoff-team">{team.name}</h4>
-                <ul className="faceoff-roster">
-                  {team.players.map((name, playerIndex) => {
-                    const player = getPlayerByName(name);
-                    return (
-                      <li key={name}>
-                        <span>{String(playerIndex + 1).padStart(2, "0")}</span>
-                        {player ? <Link href={`/players/${player.slug}`}>{name}</Link> : <strong>{name}</strong>}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </Fragment>
-          );
-        })}
-      </div>
-
-      <p className="edition-captains">
-        <span>Captains</span>
-        <strong>{edition.captains.names}</strong>
-        <small>{edition.captains.note}</small>
-      </p>
-
-      <div className="edition-rounds">
-        {edition.rounds.map((round) => (
-          <section className="round-block" key={`${edition.year}-${round.number}`} aria-labelledby={`round-${edition.year}-${round.number}`}>
-            <header className="round-heading">
-              <div>
-                <span>Round {String(round.number).padStart(2, "0")}</span>
-                <h4 id={`round-${edition.year}-${round.number}`}>{round.format}</h4>
-              </div>
-              <p>
-                <strong>{round.course}</strong>
-                <small>{round.holes} holes · {round.matches.length} matches</small>
-              </p>
-            </header>
-            <ol className="scorecard">
-              {round.matches.map((match, index) => (
-                <li key={`${match.time}-${index}`}>
-                  <time>{match.time}</time>
-                  <div className="scorecard-sides">
-                    <span className="side-a"><LinkedNames names={match.left} /></span>
-                    <b>vs</b>
-                    <span className="side-b"><LinkedNames names={match.right} /></span>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </section>
-        ))}
-      </div>
-
-      <p className="archive-note"><span /> Match-by-match results awaiting archive</p>
-    </article>
-  );
-}
+import { editions } from "../lib/editions";
+import { allPlayers, currentField } from "../lib/players";
 
 export default function Home() {
-  const threeTimers = currentField.filter((player) => player.years.length === 3).length;
-  const firstPlaying = currentField.find((player) => player.years.length === 1);
-
   return (
     <main>
       <SiteHeader />
@@ -293,15 +15,31 @@ export default function Home() {
         <div className="hero-copy">
           <p className="vertical-note">Clubhouse archive · 2024—2026</p>
           <p className="eyebrow">Bourbon Bowl / Year Three</p>
-          <h1>The <em>III</em><br />Playing</h1>
+          <h1>
+            The <em>III</em>
+            <br />
+            Playing
+          </h1>
           <div className="hero-statline">
             <strong>Eight players.</strong>
             <span>One bowl.</span>
           </div>
           <div className="hero-archive" aria-label="Bourbon Bowl editions">
-            <a href="#year-2024"><small>Archive / 01</small><b>2024</b><ArrowIcon /></a>
-            <a href="#year-2025"><small>Archive / 02</small><b>2025</b><ArrowIcon /></a>
-            <a className="current" href="#year-2026"><small>Current / 03</small><b>2026</b><ArrowIcon /></a>
+            <Link href="/2024">
+              <small>Archive / 01</small>
+              <b>2024</b>
+              <ArrowIcon />
+            </Link>
+            <Link href="/2025">
+              <small>Archive / 02</small>
+              <b>2025</b>
+              <ArrowIcon />
+            </Link>
+            <Link className="current" href="/2026">
+              <small>Current / 03</small>
+              <b>2026</b>
+              <ArrowIcon />
+            </Link>
           </div>
         </div>
 
@@ -325,96 +63,39 @@ export default function Home() {
               </li>
             ))}
           </ol>
-          <p className="motto"><em>Respect.</em><em>Honesty.</em><em>Courage.</em></p>
+          <p className="motto">
+            <em>Respect.</em>
+            <em>Honesty.</em>
+            <em>Courage.</em>
+          </p>
         </aside>
       </section>
 
-      <section className="current-year section-shell" id="year-2026">
+      <section className="current-year section-shell">
         <div className="section-intro">
           <p className="eyebrow">Current / 03</p>
-          <h2>Year Three<br /><em>starts here.</em></h2>
+          <h2>
+            Year Three
+            <br />
+            <em>starts here.</em>
+          </h2>
         </div>
         <div className="current-content">
           <p className="lead">
             The field is set. Union League National is home. The dates and tee times are locked; teams, captains, and pairings are still to be written.
           </p>
-
-          <div className="status-board" aria-label="Year Three status">
-            <div className="status-group">
-              <p className="status-label">Locked in</p>
-              <dl className="status-rows">
-                <div>
-                  <dt>Field</dt>
-                  <dd>{String(currentField.length).padStart(2, "0")} players</dd>
-                </div>
-                <div>
-                  <dt>Venue</dt>
-                  <dd>Union League National</dd>
-                </div>
-                <div>
-                  <dt>Dates</dt>
-                  <dd>July 24–25, 2026</dd>
-                </div>
-                <div>
-                  <dt>Continuity</dt>
-                  <dd>
-                    {threeTimers} three-time players
-                    {firstPlaying ? ` · ${firstPlaying.name.split(" ").slice(-1)[0]}’s first playing year` : null}
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div className="status-group">
-              <p className="status-label">Confirmed tee times</p>
-              <div className="schedule-days">
-                {schedule2026.map((schedule, index) => (
-                  <article key={schedule.date}>
-                    <div className="schedule-heading">
-                      <span>Day {String(index + 1).padStart(2, "0")}</span>
-                      <h3><small>{schedule.day}</small><time dateTime={schedule.date}>{schedule.label}</time></h3>
-                    </div>
-                    <p className="schedule-route"><span>Routing</span><strong>{schedule.route}</strong></p>
-                    <ol>
-                      {schedule.teeTimes.map((teeTime) => (
-                        <li key={teeTime.dateTime}>
-                          <time dateTime={teeTime.dateTime}>{teeTime.label}</time>
-                          <span>Pairing TBA</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </article>
-                ))}
-              </div>
-            </div>
-
-            <div className="status-group">
-              <p className="status-label">Still to write</p>
-              <dl className="status-rows pending">
-                <div>
-                  <dt>Teams</dt>
-                  <dd>TBA</dd>
-                </div>
-                <div>
-                  <dt>Captains</dt>
-                  <dd>TBA</dd>
-                </div>
-                <div>
-                  <dt>Pairings</dt>
-                  <dd>TBA</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-
           <div className="current-actions">
-            <a href="#top">View the field <ArrowIcon /></a>
-            <a href="#venue">Venue <ArrowIcon /></a>
+            <Link href="/2026">
+              Open Year Three <ArrowIcon />
+            </Link>
+            <Link href="/venue">
+              Venue <ArrowIcon />
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="venue" id="venue" aria-labelledby="venue-title">
+      <section className="venue" aria-labelledby="home-venue-title">
         <div className="venue-brand">
           <p className="eyebrow">Official venue / Swainton, New Jersey</p>
           <Image
@@ -428,47 +109,81 @@ export default function Home() {
         </div>
         <div className="venue-content">
           <p className="eyebrow">The home course</p>
-          <h2 id="venue-title">Where the<br /><em>Bowl is played.</em></h2>
-          <p className="venue-lead">The Bourbon Bowl is played at Union League National Golf Club, a 27-hole course built around three distinct nines: Grant, Meade, and Sherman.</p>
+          <h2 id="home-venue-title">
+            Where the
+            <br />
+            <em>Bowl is played.</em>
+          </h2>
+          <p className="venue-lead">
+            The Bourbon Bowl is played at Union League National Golf Club, a 27-hole course built around three distinct nines: Grant, Meade, and Sherman.
+          </p>
           <div className="venue-facts" aria-label="Venue facts">
-            <div><strong>27</strong><span>Holes</span></div>
-            <div><strong>03</strong><span>Nines</span></div>
-            <div><strong>NJ</strong><span>Swainton</span></div>
+            <div>
+              <strong>27</strong>
+              <span>Holes</span>
+            </div>
+            <div>
+              <strong>03</strong>
+              <span>Nines</span>
+            </div>
+            <div>
+              <strong>NJ</strong>
+              <span>Swainton</span>
+            </div>
           </div>
-          <a className="venue-link" href="https://www.unionleague.org/golf/national" target="_blank" rel="noreferrer">
-            Explore Union League National <ArrowIcon />
-          </a>
+          <Link className="venue-link" href="/venue">
+            Venue page <ArrowIcon />
+          </Link>
         </div>
       </section>
 
-      <section className="history section-shell" id="history">
+      <section className="history section-shell">
         <div className="section-header">
-          <div><p className="eyebrow">The archive</p><h2>Every pairing.<br /><em>Every year.</em></h2></div>
-          <p>Two completed editions. Champions first, then the field, then every scheduled match — ready for scorecards when they surface.</p>
+          <div>
+            <p className="eyebrow">The archive</p>
+            <h2>
+              Every pairing.
+              <br />
+              <em>Every year.</em>
+            </h2>
+          </div>
+          <p>Two completed editions — champions, teams, and every scheduled match in the archive.</p>
         </div>
 
-        <nav className="history-jump" aria-label="Jump to archive year">
+        <nav className="history-jump" aria-label="Jump to year pages">
           {editions.map((edition) => (
-            <a href={`#year-${edition.year}`} key={edition.year}>
+            <Link href={`/${edition.year}`} key={edition.year}>
               <small>Archive / {edition.index}</small>
               <b>{edition.year}</b>
               <span>{edition.champion}</span>
-            </a>
+            </Link>
           ))}
+          <Link href="/2026">
+            <small>Current / 03</small>
+            <b>2026</b>
+            <span>The Third Playing</span>
+          </Link>
         </nav>
 
-        {editions.map((edition) => (
-          <YearEdition edition={edition} key={edition.year} />
-        ))}
+        <p className="section-cta">
+          <Link href="/history">Full history →</Link>
+        </p>
       </section>
 
-      <section className="players section-shell" id="players">
+      <section className="players section-shell">
         <div className="section-header compact">
-          <div><p className="eyebrow">Player index</p><h2>The field,<br /><em>past & present.</em></h2></div>
+          <div>
+            <p className="eyebrow">Player index</p>
+            <h2>
+              The field,
+              <br />
+              <em>past & present.</em>
+            </h2>
+          </div>
           <p>Eleven competitors have appeared across the first three Bourbon Bowls.</p>
         </div>
         <div className="player-index">
-          {allPlayers.map((player, index) => {
+          {allPlayers.slice(0, 6).map((player, index) => {
             const bowls = player.years.length;
 
             return (
@@ -490,11 +205,21 @@ export default function Home() {
             );
           })}
         </div>
+        <p className="section-cta">
+          <Link href="/players">All player bios →</Link>
+        </p>
       </section>
 
-      <section className="records section-shell" id="records">
+      <section className="records section-shell">
         <div className="section-header compact">
-          <div><p className="eyebrow">At a glance</p><h2>The numbers<br /><em>so far.</em></h2></div>
+          <div>
+            <p className="eyebrow">At a glance</p>
+            <h2>
+              The numbers
+              <br />
+              <em>so far.</em>
+            </h2>
+          </div>
           <p>The archive distilled — one career highlight, then the ledger.</p>
         </div>
 
@@ -511,24 +236,9 @@ export default function Home() {
           </div>
         </article>
 
-        <dl className="record-grid">
-          <div>
-            <dt>Editions</dt>
-            <dd>03</dd>
-          </div>
-          <div>
-            <dt>Competitors</dt>
-            <dd>11</dd>
-          </div>
-          <div>
-            <dt>Scheduled matches</dt>
-            <dd>16</dd>
-          </div>
-          <div>
-            <dt>Three-time players</dt>
-            <dd>06</dd>
-          </div>
-        </dl>
+        <p className="section-cta">
+          <Link href="/records">Full records →</Link>
+        </p>
       </section>
 
       <section className="mark-section" aria-label="Bourbon Bowl mark">
@@ -543,7 +253,9 @@ export default function Home() {
             unoptimized
           />
         </div>
-        <p className="mark-word">Bourbon <em>Bowl</em></p>
+        <p className="mark-word">
+          Bourbon <em>Bowl</em>
+        </p>
       </section>
 
       <SiteFooter />
