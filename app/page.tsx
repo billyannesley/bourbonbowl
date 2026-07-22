@@ -1,9 +1,8 @@
-type Player = {
-  name: string;
-  initials: string;
-  years: number[];
-  note?: string;
-};
+import Image from "next/image";
+import Link from "next/link";
+import { SiteFooter } from "./components/site-footer";
+import { SiteHeader } from "./components/site-header";
+import { allPlayers, currentField } from "../lib/players";
 
 type Match = {
   time: string;
@@ -18,24 +17,6 @@ type Round = {
   holes: number;
   matches: Match[];
 };
-
-const currentField: Player[] = [
-  { name: "Stephen Aitken", initials: "SA", years: [2024, 2025, 2026], note: "Hole-in-one · Sherman No. 5" },
-  { name: "Billy Annesley", initials: "BA", years: [2024, 2025, 2026] },
-  { name: "Doug Yass", initials: "DY", years: [2024, 2025, 2026] },
-  { name: "Dirk Nicholas", initials: "DN", years: [2024, 2025, 2026] },
-  { name: "Matt Lipson", initials: "ML", years: [2024, 2025, 2026] },
-  { name: "John Lynch", initials: "JL", years: [2026], note: "2024 non-playing captain" },
-  { name: "Joey Grubb", initials: "JG", years: [2024, 2025, 2026] },
-  { name: "Balt Heldring", initials: "BH", years: [2025, 2026] },
-];
-
-const allPlayers: Player[] = [
-  ...currentField,
-  { name: "Jack Rosenberg", initials: "JR", years: [2024] },
-  { name: "Andrew Somers", initials: "AS", years: [2024] },
-  { name: "Phil Origlio", initials: "PO", years: [2025], note: "2024 non-playing captain" },
-].sort((a, b) => a.name.localeCompare(b.name));
 
 const rounds2024: Round[] = [
   {
@@ -178,18 +159,7 @@ function MatchArchive({ year, rounds }: { year: number; rounds: Round[] }) {
 export default function Home() {
   return (
     <main>
-      <header className="site-header">
-        <a className="wordmark" href="#top" aria-label="Bourbon Bowl home">
-          Bourbon <i>Bowl</i>
-        </a>
-        <nav aria-label="Primary navigation">
-          <a href="#2026">2026</a>
-          <a href="#history">History</a>
-          <a href="#players">Players</a>
-          <a href="#records">Records</a>
-        </nav>
-        <p className="edition-mark">Est. 2024<br />Year 03</p>
-      </header>
+      <SiteHeader />
 
       <section className="hero" id="top">
         <div className="hero-copy">
@@ -218,9 +188,12 @@ export default function Home() {
           <ol className="field-list">
             {currentField.map((player, index) => (
               <li key={player.name}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{player.name}</strong>
-                <abbr title={player.name}>{player.initials}</abbr>
+                <Link href={`/players/${player.slug}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <Image src={player.image} alt="" width={46} height={46} sizes="46px" />
+                  <strong>{player.name}</strong>
+                  <abbr title={player.name}>{player.initials}</abbr>
+                </Link>
               </li>
             ))}
           </ol>
@@ -237,11 +210,11 @@ export default function Home() {
           <p className="lead">The field is set. The teams, captains, venue, and match card are still to be written.</p>
           <div className="appearance-grid">
             {currentField.map((player) => (
-              <div className="appearance" key={player.name}>
-                <span>{player.initials}</span>
+              <Link className="appearance" href={`/players/${player.slug}`} key={player.name}>
+                <Image src={player.image} alt="" width={48} height={48} sizes="48px" />
                 <div><strong>{player.name}</strong><small>{player.years.length} {player.years.length === 1 ? "appearance" : "appearances"}</small></div>
                 <b>{player.years.length === 3 ? "III" : player.years.length === 2 ? "II" : "I"}</b>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -264,10 +237,13 @@ export default function Home() {
         <div className="player-index">
           {allPlayers.map((player, index) => (
             <article key={player.name}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div><h3>{player.name}</h3>{player.note && <small>{player.note}</small>}</div>
-              <p>{player.years.join(" · ")}</p>
-              <b>{player.years.length}</b>
+              <Link href={`/players/${player.slug}`}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <Image src={player.image} alt="" width={64} height={64} sizes="64px" />
+                <div><h3>{player.name}</h3>{player.note ? <small>{player.note}</small> : null}</div>
+                <p>{player.years.join(" · ")}</p>
+                <b>{player.years.length}</b>
+              </Link>
             </article>
           ))}
         </div>
@@ -294,11 +270,7 @@ export default function Home() {
         </article>
       </section>
 
-      <footer>
-        <a className="wordmark" href="#top">Bourbon <i>Bowl</i></a>
-        <p>Respect. Honesty. Courage.</p>
-        <span>2024—2026</span>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
