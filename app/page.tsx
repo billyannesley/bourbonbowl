@@ -495,22 +495,40 @@ export default function Home() {
       <section className="records section-shell" id="records">
         <div className="section-header compact">
           <div><p className="eyebrow">At a glance</p><h2>The numbers<br /><em>so far.</em></h2></div>
-          <p>Verified from the original match posters, confirmed team winners, and the announced Year 3 field.</p>
+          <p>The archive distilled — one career highlight, then the ledger.</p>
         </div>
-        <div className="record-grid">
-          <div><strong>03</strong><span>Editions</span></div>
-          <div><strong>11</strong><span>Competitors</span></div>
-          <div><strong>16</strong><span>Scheduled matches</span></div>
-          <div><strong>06</strong><span>Three-time players</span></div>
-        </div>
+
         <article className="ace-record">
           <p className="eyebrow">Career highlight / 01</p>
-          <div>
+          <div className="ace-body">
             <strong>Ace</strong>
-            <h3>Stephen Aitken</h3>
-            <p>Hole-in-one · Sherman No. 5</p>
+            <div className="ace-detail">
+              <h3>
+                <Link href="/players/stephen-aitken">Stephen Aitken</Link>
+              </h3>
+              <p>Hole-in-one · Sherman No. 5</p>
+            </div>
           </div>
         </article>
+
+        <dl className="record-grid">
+          <div>
+            <dt>Editions</dt>
+            <dd>03</dd>
+          </div>
+          <div>
+            <dt>Competitors</dt>
+            <dd>11</dd>
+          </div>
+          <div>
+            <dt>Scheduled matches</dt>
+            <dd>16</dd>
+          </div>
+          <div>
+            <dt>Three-time players</dt>
+            <dd>06</dd>
+          </div>
+        </dl>
       </section>
 
       <section className="mark-section" aria-label="Bourbon Bowl mark">

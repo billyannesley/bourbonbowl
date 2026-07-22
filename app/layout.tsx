@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const title = "Bourbon Bowl — The Clubhouse Archive";
-const description = "Players, pairings, and history from the annual Bourbon Bowl golf outing.";
+const title = "Bourbon Bowl";
+const description = "The annual Bourbon Bowl golf outing.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bourbonbowl.golf"),
@@ -22,13 +22,13 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "Bourbon Bowl",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Bourbon Bowl — The Third Playing" }],
+    images: [{ url: "/bourbon_bowl_og_image.png", width: 2731, height: 1537, alt: "Bourbon Bowl" }],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
-    images: ["/og.png"],
+    images: ["/bourbon_bowl_og_image.png"],
   },
 };
 
