@@ -174,7 +174,8 @@
 
 .row:hover .who h2 > span,
 .row:focus-visible .who h2 > span {
-  background: var(--paper);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .who small {
