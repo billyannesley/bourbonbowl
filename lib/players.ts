@@ -182,8 +182,24 @@ export const players: Player[] = [
 
 export const currentField = players.filter((player) => player.years.includes(2026));
 
-export const allPlayers = players.toSorted((a, b) => a.name.localeCompare(b.name));
+export function playerLastName(name: string) {
+  const parts = name.trim().split(/\s+/);
+  return parts[parts.length - 1] ?? name;
+}
+
+export const allPlayers = players.toSorted((a, b) => {
+  const byBowls = b.years.length - a.years.length;
+  if (byBowls !== 0) return byBowls;
+
+  const byLast = playerLastName(a.name).localeCompare(playerLastName(b.name));
+  return byLast !== 0 ? byLast : a.name.localeCompare(b.name);
+});
 
 export function getPlayerBySlug(slug: string) {
   return players.find((player) => player.slug === slug);
+}
+
+export function getPlayerByName(name: string) {
+  const normalized = name.trim().toLowerCase();
+  return players.find((player) => player.name.toLowerCase() === normalized);
 }

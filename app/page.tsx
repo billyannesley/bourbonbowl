@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 import { SiteFooter } from "./components/site-footer";
 import { SiteHeader } from "./components/site-header";
-import { allPlayers, currentField } from "../lib/players";
+import { allPlayers, currentField, getPlayerByName } from "../lib/players";
 
 type Match = {
   time: string;
@@ -18,6 +19,20 @@ type Round = {
   matches: Match[];
 };
 
+type ArchiveTeam = {
+  name: string;
+  players: string[];
+};
+
+type Edition = {
+  year: number;
+  index: string;
+  champion: string;
+  captains: { names: string; note: string };
+  teams: [ArchiveTeam, ArchiveTeam];
+  rounds: Round[];
+};
+
 const rounds2024: Round[] = [
   {
     number: 1,
@@ -26,7 +41,7 @@ const rounds2024: Round[] = [
     holes: 18,
     matches: [
       { time: "10:10 AM", left: "Billy Annesley / Jack Rosenberg", right: "Joey Grubb / Andrew Somers" },
-      { time: "10:20 AM", left: "Matt Lipson / Dirk Nicholas", right: "Stephen Aitken / Doug Yass" },
+      { time: "10:20 AM", left: "Matt Lipson / Dirk Nicholas", right: "Stephen Aitken / Douglas Yass" },
     ],
   },
   {
@@ -36,7 +51,7 @@ const rounds2024: Round[] = [
     holes: 9,
     matches: [
       { time: "5:30 PM", left: "Billy Annesley / Dirk Nicholas", right: "Stephen Aitken / Andrew Somers" },
-      { time: "5:40 PM", left: "Matt Lipson / Jack Rosenberg", right: "Joey Grubb / Doug Yass" },
+      { time: "5:40 PM", left: "Matt Lipson / Jack Rosenberg", right: "Joey Grubb / Douglas Yass" },
     ],
   },
   {
@@ -48,7 +63,7 @@ const rounds2024: Round[] = [
       { time: "8:50 AM", left: "Dirk Nicholas", right: "Stephen Aitken" },
       { time: "8:50 AM", left: "Jack Rosenberg", right: "Joey Grubb" },
       { time: "9:00 AM", left: "Billy Annesley", right: "Andrew Somers" },
-      { time: "9:00 AM", left: "Matt Lipson", right: "Doug Yass" },
+      { time: "9:00 AM", left: "Matt Lipson", right: "Douglas Yass" },
     ],
   },
 ];
@@ -60,7 +75,7 @@ const rounds2025: Round[] = [
     course: "Meade / Sherman",
     holes: 18,
     matches: [
-      { time: "11:00 AM", left: "Stephen Aitken / Phil Origlio", right: "Dirk Nicholas / Doug Yass" },
+      { time: "11:00 AM", left: "Stephen Aitken / Phil Origlio", right: "Dirk Nicholas / Douglas Yass" },
       { time: "11:10 AM", left: "Matt Lipson / Balt Heldring", right: "Billy Annesley / Joey Grubb" },
     ],
   },
@@ -71,7 +86,7 @@ const rounds2025: Round[] = [
     holes: 18,
     matches: [
       { time: "5:00 PM", left: "Stephen Aitken / Matt Lipson", right: "Dirk Nicholas / Billy Annesley" },
-      { time: "5:10 PM", left: "Balt Heldring / Phil Origlio", right: "Joey Grubb / Doug Yass" },
+      { time: "5:10 PM", left: "Balt Heldring / Phil Origlio", right: "Joey Grubb / Douglas Yass" },
     ],
   },
   {
@@ -83,7 +98,7 @@ const rounds2025: Round[] = [
       { time: "11:00 AM", left: "Stephen Aitken", right: "Joey Grubb" },
       { time: "11:00 AM", left: "Balt Heldring", right: "Dirk Nicholas" },
       { time: "11:10 AM", left: "Matt Lipson", right: "Billy Annesley" },
-      { time: "11:10 AM", left: "Phil Origlio", right: "Doug Yass" },
+      { time: "11:10 AM", left: "Phil Origlio", right: "Douglas Yass" },
     ],
   },
 ];
@@ -115,66 +130,153 @@ function ArrowIcon() {
   return <span aria-hidden="true">↗</span>;
 }
 
-function MatchArchive({ year, rounds }: { year: number; rounds: Round[] }) {
-  const is2024 = year === 2024;
-  const champion = is2024 ? "Flex Beans" : "Big Daddy’s";
+const editions: Edition[] = [
+  {
+    year: 2024,
+    index: "01",
+    champion: "Flex Beans",
+    captains: { names: "Phil Origlio & John Lynch", note: "Non-playing captains" },
+    teams: [
+      {
+        name: "Flex Beans",
+        players: ["Stephen Aitken", "Joey Grubb", "Andrew Somers", "Douglas Yass"],
+      },
+      {
+        name: "Down 2 Hang",
+        players: ["Billy Annesley", "Matt Lipson", "Dirk Nicholas", "Jack Rosenberg"],
+      },
+    ],
+    rounds: rounds2024,
+  },
+  {
+    year: 2025,
+    index: "02",
+    champion: "Big Daddy’s",
+    captains: { names: "Stephen Aitken & Billy Annesley", note: "Playing captains" },
+    teams: [
+      {
+        name: "Big Daddy’s",
+        players: ["Stephen Aitken", "Balt Heldring", "Matt Lipson", "Phil Origlio"],
+      },
+      {
+        name: "BMYP",
+        players: ["Billy Annesley", "Joey Grubb", "Dirk Nicholas", "Douglas Yass"],
+      },
+    ],
+    rounds: rounds2025,
+  },
+];
+
+function LinkedNames({ names }: { names: string }) {
+  const parts = names.split(" / ");
 
   return (
-    <article className="year-record" id={`year-${year}`}>
-      <header className="record-heading">
-        <div>
-          <p className="eyebrow">Archive / {year === 2024 ? "01" : "02"}</p>
-          <h3>{year}</h3>
+    <>
+      {parts.map((name, index) => {
+        const player = getPlayerByName(name);
+        const label = player ? (
+          <Link href={`/players/${player.slug}`}>{name}</Link>
+        ) : (
+          <span>{name}</span>
+        );
+
+        return (
+          <Fragment key={`${name}-${index}`}>
+            {index > 0 ? <i aria-hidden="true"> / </i> : null}
+            {label}
+          </Fragment>
+        );
+      })}
+    </>
+  );
+}
+
+function YearEdition({ edition }: { edition: Edition }) {
+  const matchCount = edition.rounds.reduce((total, round) => total + round.matches.length, 0);
+
+  return (
+    <article className="year-record" id={`year-${edition.year}`}>
+      <header className="edition-masthead">
+        <div className="edition-year">
+          <p className="eyebrow">Archive / {edition.index}</p>
+          <h3>{edition.year}</h3>
+          <p className="edition-summary">
+            {edition.rounds.length} rounds · {matchCount} matches · 2 teams
+          </p>
         </div>
-        <div className="captain-note">
-          <span>Captains</span>
-          <strong>
-            {is2024 ? "Phil Origlio & John Lynch" : "Stephen Aitken & Billy Annesley"}
-          </strong>
-          <small>{is2024 ? "Non-playing" : "Playing captains"}</small>
+        <div className="edition-champion">
+          <span>Champion</span>
+          <strong>{edition.champion}</strong>
         </div>
       </header>
 
-      <div className="team-grid">
-        <div>
-          <p className="team-label">{is2024 ? "Flex Beans" : "Big Daddy’s"}</p>
-          <p>{is2024 ? "Aitken · Grubb · Somers · Yass" : "Aitken · Heldring · Lipson · Origlio"}</p>
-        </div>
-        <div>
-          <p className="team-label">{is2024 ? "Down 2 Hang" : "BMYP"}</p>
-          <p>{is2024 ? "Annesley · Lipson · Nicholas · Rosenberg" : "Annesley · Grubb · Nicholas · Yass"}</p>
-        </div>
+      <div className="team-faceoff" aria-label={`${edition.year} teams`}>
+        {edition.teams.map((team, index) => {
+          const won = team.name === edition.champion;
+
+          return (
+            <Fragment key={team.name}>
+              {index === 1 ? (
+                <div className="faceoff-divider" aria-hidden="true">
+                  <span>vs</span>
+                </div>
+              ) : null}
+              <div className={`faceoff-side${won ? " winner" : ""}`}>
+                <p className="faceoff-result">{won ? "Champion" : "Runner-up"}</p>
+                <h4 className="faceoff-team">{team.name}</h4>
+                <ul className="faceoff-roster">
+                  {team.players.map((name, playerIndex) => {
+                    const player = getPlayerByName(name);
+                    return (
+                      <li key={name}>
+                        <span>{String(playerIndex + 1).padStart(2, "0")}</span>
+                        {player ? <Link href={`/players/${player.slug}`}>{name}</Link> : <strong>{name}</strong>}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </Fragment>
+          );
+        })}
       </div>
 
-      <div className="rounds-grid">
-        {rounds.map((round) => (
-          <section className="round-card" key={`${year}-${round.number}`}>
-            <div className="round-meta">
-              <span>Round {round.number}</span>
-              <span>{round.holes} holes</span>
-            </div>
-            <h4>{round.format}</h4>
-            <p className="course">{round.course}</p>
-            <div className="matches">
+      <p className="edition-captains">
+        <span>Captains</span>
+        <strong>{edition.captains.names}</strong>
+        <small>{edition.captains.note}</small>
+      </p>
+
+      <div className="edition-rounds">
+        {edition.rounds.map((round) => (
+          <section className="round-block" key={`${edition.year}-${round.number}`} aria-labelledby={`round-${edition.year}-${round.number}`}>
+            <header className="round-heading">
+              <div>
+                <span>Round {String(round.number).padStart(2, "0")}</span>
+                <h4 id={`round-${edition.year}-${round.number}`}>{round.format}</h4>
+              </div>
+              <p>
+                <strong>{round.course}</strong>
+                <small>{round.holes} holes · {round.matches.length} matches</small>
+              </p>
+            </header>
+            <ol className="scorecard">
               {round.matches.map((match, index) => (
-                <div className="match" key={`${match.time}-${index}`}>
+                <li key={`${match.time}-${index}`}>
                   <time>{match.time}</time>
-                  <div>
-                    <span>{match.left}</span>
-                    <b>vs.</b>
-                    <span>{match.right}</span>
+                  <div className="scorecard-sides">
+                    <span className="side-a"><LinkedNames names={match.left} /></span>
+                    <b>vs</b>
+                    <span className="side-b"><LinkedNames names={match.right} /></span>
                   </div>
-                </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </section>
         ))}
       </div>
 
-      <div className="archive-outcome">
-        <p className="champion"><span>Champion</span><strong>{champion}</strong></p>
-        <p className="pending-result"><span /> Match-by-match results awaiting archive</p>
-      </div>
+      <p className="archive-note"><span /> Match-by-match results awaiting archive</p>
     </article>
   );
 }
@@ -191,7 +293,7 @@ export default function Home() {
         <div className="hero-copy">
           <p className="vertical-note">Clubhouse archive · 2024—2026</p>
           <p className="eyebrow">Bourbon Bowl / Year Three</p>
-          <h1>The <em>Third</em><br />Playing</h1>
+          <h1>The <em>III</em><br />Playing</h1>
           <div className="hero-statline">
             <strong>Eight players.</strong>
             <span>One bowl.</span>
@@ -342,10 +444,22 @@ export default function Home() {
       <section className="history section-shell" id="history">
         <div className="section-header">
           <div><p className="eyebrow">The archive</p><h2>Every pairing.<br /><em>Every year.</em></h2></div>
-          <p>Two editions, sixteen scheduled matches, and one evolving record. Results can be added as the original scorecards surface.</p>
+          <p>Two completed editions. Champions first, then the field, then every scheduled match — ready for scorecards when they surface.</p>
         </div>
-        <MatchArchive year={2024} rounds={rounds2024} />
-        <MatchArchive year={2025} rounds={rounds2025} />
+
+        <nav className="history-jump" aria-label="Jump to archive year">
+          {editions.map((edition) => (
+            <a href={`#year-${edition.year}`} key={edition.year}>
+              <small>Archive / {edition.index}</small>
+              <b>{edition.year}</b>
+              <span>{edition.champion}</span>
+            </a>
+          ))}
+        </nav>
+
+        {editions.map((edition) => (
+          <YearEdition edition={edition} key={edition.year} />
+        ))}
       </section>
 
       <section className="players section-shell" id="players">
@@ -354,17 +468,27 @@ export default function Home() {
           <p>Eleven competitors have appeared across the first three Bourbon Bowls.</p>
         </div>
         <div className="player-index">
-          {allPlayers.map((player, index) => (
-            <article key={player.name}>
-              <Link href={`/players/${player.slug}`}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <Image src={player.image} alt="" width={64} height={64} sizes="64px" />
-                <div><h3>{player.name}</h3>{player.note ? <small>{player.note}</small> : null}</div>
-                <p>{player.handicap ? `2026 · ${player.handicap.tee} · PH ${player.handicap.playingHandicap}` : player.years.join(" · ")}</p>
-                <b>{player.years.length}</b>
-              </Link>
-            </article>
-          ))}
+          {allPlayers.map((player, index) => {
+            const bowls = player.years.length;
+
+            return (
+              <article key={player.name}>
+                <Link href={`/players/${player.slug}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <Image src={player.image} alt="" width={64} height={64} sizes="64px" />
+                  <div>
+                    <h3>{player.name}</h3>
+                    {player.note ? <small>{player.note}</small> : null}
+                  </div>
+                  <p>{player.years.join(" · ")}</p>
+                  <b>
+                    <strong>{String(bowls).padStart(2, "0")}</strong>
+                    <small>{bowls === 1 ? "Bowl" : "Bowls"}</small>
+                  </b>
+                </Link>
+              </article>
+            );
+          })}
         </div>
       </section>
 
@@ -387,6 +511,21 @@ export default function Home() {
             <p>Hole-in-one · Sherman No. 5</p>
           </div>
         </article>
+      </section>
+
+      <section className="mark-section" aria-label="Bourbon Bowl mark">
+        <div className="mark-stage">
+          <Image
+            className="mark-trophy"
+            src="/bourbonbowl_icon.svg"
+            alt="Bourbon Bowl trophy"
+            width={754}
+            height={855}
+            sizes="(max-width: 860px) 70vw, min(42vw, 420px)"
+            unoptimized
+          />
+        </div>
+        <p className="mark-word">Bourbon <em>Bowl</em></p>
       </section>
 
       <SiteFooter />
