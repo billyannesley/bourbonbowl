@@ -33,7 +33,7 @@ const currentField: Player[] = [
 const allPlayers: Player[] = [
   ...currentField,
   { name: "Jack Rosenberg", initials: "JR", years: [2024] },
-  { name: "Andrew Summers", initials: "AS", years: [2024] },
+  { name: "Andrew Somers", initials: "AS", years: [2024] },
   { name: "Phil Origlio", initials: "PO", years: [2025], note: "2024 non-playing captain" },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
@@ -44,7 +44,7 @@ const rounds2024: Round[] = [
     course: "Meade / Sherman",
     holes: 18,
     matches: [
-      { time: "10:10 AM", left: "Billy Annesley / Jack Rosenberg", right: "Joey Grubb / Andrew Summers" },
+      { time: "10:10 AM", left: "Billy Annesley / Jack Rosenberg", right: "Joey Grubb / Andrew Somers" },
       { time: "10:20 AM", left: "Matt Lipson / Dirk Nicholas", right: "Stephen Aitken / Doug Yass" },
     ],
   },
@@ -54,7 +54,7 @@ const rounds2024: Round[] = [
     course: "Sherman or Meade",
     holes: 9,
     matches: [
-      { time: "5:30 PM", left: "Billy Annesley / Dirk Nicholas", right: "Stephen Aitken / Andrew Summers" },
+      { time: "5:30 PM", left: "Billy Annesley / Dirk Nicholas", right: "Stephen Aitken / Andrew Somers" },
       { time: "5:40 PM", left: "Matt Lipson / Jack Rosenberg", right: "Joey Grubb / Doug Yass" },
     ],
   },
@@ -66,7 +66,7 @@ const rounds2024: Round[] = [
     matches: [
       { time: "8:50 AM", left: "Dirk Nicholas", right: "Stephen Aitken" },
       { time: "8:50 AM", left: "Jack Rosenberg", right: "Joey Grubb" },
-      { time: "9:00 AM", left: "Billy Annesley", right: "Andrew Summers" },
+      { time: "9:00 AM", left: "Billy Annesley", right: "Andrew Somers" },
       { time: "9:00 AM", left: "Matt Lipson", right: "Doug Yass" },
     ],
   },
@@ -134,7 +134,7 @@ function MatchArchive({ year, rounds }: { year: number; rounds: Round[] }) {
       <div className="team-grid">
         <div>
           <p className="team-label">{is2024 ? "Flex Beans" : "Big Daddy’s"}</p>
-          <p>{is2024 ? "Aitken · Grubb · Summers · Yass" : "Aitken · Heldring · Lipson · Origlio"}</p>
+          <p>{is2024 ? "Aitken · Grubb · Somers · Yass" : "Aitken · Heldring · Lipson · Origlio"}</p>
         </div>
         <div>
           <p className="team-label">{is2024 ? "Down 2 Hang" : "BMYP"}</p>
