@@ -29,7 +29,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   z-index: 20;
 }
 
-.wordmark { font-family: Georgia, "Times New Roman", serif; font-size: 26px; font-weight: 700; letter-spacing: -.04em; text-transform: uppercase; }
+.wordmark { display: inline-flex; align-items: center; gap: 13px; justify-self: start; font-family: Georgia, "Times New Roman", serif; font-size: 26px; font-weight: 700; letter-spacing: -.04em; text-transform: uppercase; }
+.wordmark-icon { width: 44px; height: 50px; object-fit: contain; }
 .wordmark i { font-weight: 400; }
 .site-header nav { display: flex; gap: clamp(24px, 3vw, 48px); }
 .site-header nav a { padding: 12px 0; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; border-bottom: 2px solid transparent; transition: border-color .2s ease; }
@@ -215,7 +216,9 @@ footer > span { justify-self: end; font-size: 11px; letter-spacing: .16em; }
 }
 
 @media (max-width: 720px) {
-  .site-header { min-height: 78px; grid-template-columns: 1fr auto; }
+  .site-header { min-height: 78px; grid-template-columns: 1fr auto; background: var(--paper); backdrop-filter: none; }
+  .wordmark { gap: 9px; font-size: 21px; }
+  .wordmark-icon { width: 32px; height: 37px; }
   .site-header nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; justify-content: space-around; gap: 0; padding: 8px 10px max(8px, env(safe-area-inset-bottom)); background: var(--ink); color: var(--paper); }
   .site-header nav a { padding: 8px; font-size: 9px; }
   .edition-mark { display: none; }
@@ -224,7 +227,7 @@ footer > span { justify-self: end; font-size: 11px; letter-spacing: .16em; }
   .vertical-note { display: none; }
   .hero h1 { font-size: clamp(68px, 23vw, 112px); }
   .hero-statline { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .hero-archive { margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); }
+  .hero-archive { margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .hero-archive a { min-height: 140px; padding: 18px 12px; }
   .field-card { min-height: auto; padding-bottom: 70px; }
   .field-list li a { min-height: 64px; }

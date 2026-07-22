@@ -8,6 +8,14 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://bourbonbowl.golf"),
   title,
   description,
+  icons: {
+    icon: [
+      { url: "/bourbon_bowl_favicon.svg", type: "image/svg+xml" },
+      { url: "/bourbon_bowl_favicon.png", type: "image/png", sizes: "1081x1081" },
+    ],
+    shortcut: "/bourbon_bowl_favicon.svg",
+    apple: "/bourbon_bowl_favicon.png",
+  },
   openGraph: {
     title,
     description,

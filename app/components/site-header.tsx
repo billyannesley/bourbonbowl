@@ -1,10 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export function SiteHeader() {
   return (
     <header className="site-header">
       <Link className="wordmark" href="/" aria-label="Bourbon Bowl home">
-        Bourbon <i>Bowl</i>
+        <Image
+          className="wordmark-icon"
+          src="/bourbonbowl_icon.svg"
+          alt=""
+          width={44}
+          height={50}
+          priority
+        />
+        <span>Bourbon <i>Bowl</i></span>
       </Link>
       <nav aria-label="Primary navigation">
         <Link href="/#2026">2026</Link>
