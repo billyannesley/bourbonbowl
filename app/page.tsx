@@ -88,6 +88,29 @@ const rounds2025: Round[] = [
   },
 ];
 
+const schedule2026 = [
+  {
+    date: "2026-07-24",
+    day: "Friday",
+    label: "July 24",
+    route: "Meade → Grant",
+    teeTimes: [
+      { label: "12:00 PM", dateTime: "2026-07-24T12:00" },
+      { label: "12:10 PM", dateTime: "2026-07-24T12:10" },
+    ],
+  },
+  {
+    date: "2026-07-25",
+    day: "Saturday",
+    label: "July 25",
+    route: "Sherman → Grant",
+    teeTimes: [
+      { label: "11:00 AM", dateTime: "2026-07-25T11:00" },
+      { label: "11:10 AM", dateTime: "2026-07-25T11:10" },
+    ],
+  },
+] as const;
+
 function ArrowIcon() {
   return <span aria-hidden="true">↗</span>;
 }
@@ -157,6 +180,9 @@ function MatchArchive({ year, rounds }: { year: number; rounds: Round[] }) {
 }
 
 export default function Home() {
+  const threeTimers = currentField.filter((player) => player.years.length === 3).length;
+  const firstPlaying = currentField.find((player) => player.years.length === 1);
+
   return (
     <main>
       <SiteHeader />
@@ -173,7 +199,7 @@ export default function Home() {
           <div className="hero-archive" aria-label="Bourbon Bowl editions">
             <a href="#year-2024"><small>Archive / 01</small><b>2024</b><ArrowIcon /></a>
             <a href="#year-2025"><small>Archive / 02</small><b>2025</b><ArrowIcon /></a>
-            <a className="current" href="#2026"><small>Current / 03</small><b>2026</b><ArrowIcon /></a>
+            <a className="current" href="#year-2026"><small>Current / 03</small><b>2026</b><ArrowIcon /></a>
           </div>
         </div>
 
@@ -201,21 +227,87 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="current-year section-shell" id="2026">
+      <section className="current-year section-shell" id="year-2026">
         <div className="section-intro">
           <p className="eyebrow">Current / 03</p>
           <h2>Year Three<br /><em>starts here.</em></h2>
         </div>
         <div className="current-content">
-          <p className="lead">The field is set. Union League National is home. The teams, captains, and match card are still to be written.</p>
-          <div className="appearance-grid">
-            {currentField.map((player) => (
-              <Link className="appearance" href={`/players/${player.slug}`} key={player.name}>
-                <Image src={player.image} alt="" width={48} height={48} sizes="48px" />
-                <div><strong>{player.name}</strong><small>{player.years.length} {player.years.length === 1 ? "appearance" : "appearances"}</small></div>
-                <b>{player.years.length === 3 ? "III" : player.years.length === 2 ? "II" : "I"}</b>
-              </Link>
-            ))}
+          <p className="lead">
+            The field is set. Union League National is home. The dates and tee times are locked; teams, captains, and pairings are still to be written.
+          </p>
+
+          <div className="status-board" aria-label="Year Three status">
+            <div className="status-group">
+              <p className="status-label">Locked in</p>
+              <dl className="status-rows">
+                <div>
+                  <dt>Field</dt>
+                  <dd>{String(currentField.length).padStart(2, "0")} players</dd>
+                </div>
+                <div>
+                  <dt>Venue</dt>
+                  <dd>Union League National</dd>
+                </div>
+                <div>
+                  <dt>Dates</dt>
+                  <dd>July 24–25, 2026</dd>
+                </div>
+                <div>
+                  <dt>Continuity</dt>
+                  <dd>
+                    {threeTimers} three-time players
+                    {firstPlaying ? ` · ${firstPlaying.name.split(" ").slice(-1)[0]}’s first playing year` : null}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="status-group">
+              <p className="status-label">Confirmed tee times</p>
+              <div className="schedule-days">
+                {schedule2026.map((schedule, index) => (
+                  <article key={schedule.date}>
+                    <div className="schedule-heading">
+                      <span>Day {String(index + 1).padStart(2, "0")}</span>
+                      <h3><small>{schedule.day}</small><time dateTime={schedule.date}>{schedule.label}</time></h3>
+                    </div>
+                    <p className="schedule-route"><span>Routing</span><strong>{schedule.route}</strong></p>
+                    <ol>
+                      {schedule.teeTimes.map((teeTime) => (
+                        <li key={teeTime.dateTime}>
+                          <time dateTime={teeTime.dateTime}>{teeTime.label}</time>
+                          <span>Pairing TBA</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </article>
+                ))}
+              </div>
+            </div>
+
+            <div className="status-group">
+              <p className="status-label">Still to write</p>
+              <dl className="status-rows pending">
+                <div>
+                  <dt>Teams</dt>
+                  <dd>TBA</dd>
+                </div>
+                <div>
+                  <dt>Captains</dt>
+                  <dd>TBA</dd>
+                </div>
+                <div>
+                  <dt>Pairings</dt>
+                  <dd>TBA</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div className="current-actions">
+            <a href="#top">View the field <ArrowIcon /></a>
+            <a href="#venue">Venue <ArrowIcon /></a>
           </div>
         </div>
       </section>

@@ -16,7 +16,7 @@ export function SiteHeader() {
         <span>Bourbon <i>Bowl</i></span>
       </Link>
       <nav aria-label="Primary navigation">
-        <Link href="/#2026">2026</Link>
+        <Link href="/#year-2026">2026</Link>
         <Link href="/#venue">Venue</Link>
         <Link href="/#history">History</Link>
         <Link href="/#players">Players</Link>
