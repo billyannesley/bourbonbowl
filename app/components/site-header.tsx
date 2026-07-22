@@ -19,7 +19,7 @@ export function SiteHeader() {
         <Link href="/#year-2026">2026</Link>
         <Link href="/#venue">Venue</Link>
         <Link href="/#history">History</Link>
-        <Link href="/#players">Players</Link>
+        <Link href="/players">Players</Link>
         <Link href="/#records">Records</Link>
       </nav>
       <p className="edition-mark">Est. 2024<br />Year 03</p>

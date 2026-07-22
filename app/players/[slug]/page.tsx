@@ -85,7 +85,7 @@ export default async function PlayerProfile({ params }: PlayerProfileProps) {
 
         <div className={styles.identity}>
           <div className={styles.identityTop}>
-            <Link className={styles.back} href="/#players">← Field index</Link>
+            <Link className={styles.back} href="/players">← Field index</Link>
             <p className={styles.jersey}>
               <span>No.</span>
               <strong>{String(rosterIndex + 1).padStart(2, "0")}</strong>
