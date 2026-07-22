@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "../../components/site-footer";
 import { SiteHeader } from "../../components/site-header";
-import { allPlayers, getPlayerBySlug, players } from "../../../lib/players";
+import { allPlayers, getPlayerBySlug, playerLastName, players } from "../../../lib/players";
 import styles from "./profile.module.css";
 
 type PlayerProfileProps = {
@@ -38,6 +38,12 @@ export async function generateMetadata({ params }: PlayerProfileProps): Promise<
   };
 }
 
+function splitName(name: string) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return { first: parts[0], last: "" };
+  return { first: parts.slice(0, -1).join(" "), last: parts[parts.length - 1] ?? "" };
+}
+
 export default async function PlayerProfile({ params }: PlayerProfileProps) {
   const { slug } = await params;
   const player = getPlayerBySlug(slug);
@@ -48,42 +54,120 @@ export default async function PlayerProfile({ params }: PlayerProfileProps) {
 
   const championships = player.championships ?? [];
   const roles = player.roles ?? [];
+  const { first, last } = splitName(player.name);
+  const rosterIndex = allPlayers.findIndex((entry) => entry.slug === player.slug);
+  const prev = rosterIndex > 0 ? allPlayers[rosterIndex - 1] : allPlayers[allPlayers.length - 1];
+  const next = rosterIndex < allPlayers.length - 1 ? allPlayers[rosterIndex + 1] : allPlayers[0];
+  const inField = player.years.includes(2026);
+  const bowls = player.years.length;
+  const seasons = [...player.years].sort((a, b) => a - b);
+
+  const deck = championships.length > 0
+    ? `${championships.length}× champion · ${bowls} Bourbon Bowl${bowls === 1 ? "" : "s"}.`
+    : roles.length > 0
+      ? `${bowls} Bourbon Bowl${bowls === 1 ? "" : "s"} · ${roles[0]?.label}.`
+      : `${bowls} Bourbon Bowl${bowls === 1 ? "" : "s"} in the archive.`;
 
   return (
-    <main>
+    <main className={styles.page}>
       <SiteHeader />
 
-      <section className="profile-hero">
-        <div className="profile-portrait">
+      <section className={styles.hero} aria-labelledby="player-name">
+        <div className={styles.portrait}>
           <Image
             src={player.image}
             alt={player.name}
             fill
             priority
-            sizes="(max-width: 850px) 100vw, 46vw"
+            sizes="(max-width: 900px) 100vw, 48vw"
           />
-          <span>{player.initials}</span>
         </div>
 
-        <div className="profile-intro">
-          <Link className="profile-back" href="/#players">← Player index</Link>
-          <p className="eyebrow">Player profile / {player.initials}</p>
-          <h1>{player.name}</h1>
-          <p className="profile-deck">
-            {championships.length > 0
-              ? `${championships.length}× Bourbon Bowl champion and ${player.years.length}× competitor.`
-              : `${player.years.length}× Bourbon Bowl competitor. Career archive in progress.`}
-          </p>
-          <div className="profile-statline">
-            <div><strong>{String(player.years.length).padStart(2, "0")}</strong><span>Appearances</span></div>
-            <div><strong>{String(championships.length).padStart(2, "0")}</strong><span>Team titles</span></div>
-            <div><strong>{String(roles.length).padStart(2, "0")}</strong><span>Captaincies</span></div>
+        <div className={styles.identity}>
+          <div className={styles.identityTop}>
+            <Link className={styles.back} href="/#players">← Field index</Link>
+            <p className={styles.jersey}>
+              <span>No.</span>
+              <strong>{String(rosterIndex + 1).padStart(2, "0")}</strong>
+            </p>
           </div>
+
+          <div className={styles.nameBlock}>
+            <p className="eyebrow">Bourbon Bowl / Bio</p>
+            <h1 id="player-name">
+              <span>{first}</span>
+              {last ? <em>{last}</em> : null}
+            </h1>
+            <p className={styles.deck}>{deck}</p>
+          </div>
+
+          <ul className={styles.tags} aria-label="Player status">
+            <li>{bowls === 1 ? "01 Bowl" : `${String(bowls).padStart(2, "0")} Bowls`}</li>
+            {championships.length > 0 ? <li>{String(championships.length).padStart(2, "0")} Titles</li> : null}
+            {roles.length > 0 ? <li>Captain</li> : null}
+            {inField ? <li>Field ’26</li> : <li>Archive</li>}
+          </ul>
+
+          <dl className={styles.statline}>
+            <div>
+              <dt>Appearances</dt>
+              <dd>{String(bowls).padStart(2, "0")}</dd>
+            </div>
+            <div>
+              <dt>Team titles</dt>
+              <dd>{String(championships.length).padStart(2, "0")}</dd>
+            </div>
+            <div>
+              <dt>Captaincies</dt>
+              <dd>{String(roles.length).padStart(2, "0")}</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      {player.highlights?.length ? (
+        <section className={styles.highlight} aria-label="Career highlight">
+          <p className="eyebrow">Known highlight</p>
+          <p className={styles.highlightText}>
+            <em>{player.highlights[0]}</em>
+          </p>
+        </section>
+      ) : null}
+
+      <section className={`${styles.seasons} section-shell`} aria-labelledby="seasons-title">
+        <div className="section-header compact">
+          <div>
+            <p className="eyebrow">Season book</p>
+            <h2 id="seasons-title">Year by<br /><em>year.</em></h2>
+          </div>
+          <p>Every Bourbon Bowl appearance on record — team, role, and result.</p>
+        </div>
+
+        <div className={styles.seasonGrid}>
+          {seasons.map((year) => {
+            const team = player.teams.find((entry) => entry.year === year);
+            const role = roles.find((entry) => entry.year === year);
+            const championship = championships.find((entry) => entry.year === year);
+
+            return (
+              <article key={year} className={championship ? styles.seasonWin : undefined}>
+                <header>
+                  <span>{year === 2026 ? "Current" : "Archive"}</span>
+                  <h3>{year}</h3>
+                </header>
+                <div className={styles.seasonBody}>
+                  <p className={styles.teamName}>{team?.name ?? "—"}</p>
+                  {role ? <p className={styles.role}>{role.label}</p> : null}
+                </div>
+                {championship ? <b>Champion</b> : <b className={styles.mutedBadge}>Competed</b>}
+              </article>
+            );
+          })}
         </div>
       </section>
 
       {player.handicap ? (
-        <section className={`${styles.handicapCard} section-shell`} aria-labelledby="handicap-title">
+        <section className={`${styles.handicap} section-shell`} aria-labelledby="handicap-title">
           <div className="section-header compact">
             <div>
               <p className="eyebrow">Year Three / Handicap card</p>
@@ -91,75 +175,65 @@ export default async function PlayerProfile({ params }: PlayerProfileProps) {
             </div>
             <p>Official 2026 Bourbon Bowl handicap card for the Blue tees. Strokes are shown off the low player.</p>
           </div>
-          <div className={styles.handicapGrid}>
-            <div><strong>{player.handicap.tee}</strong><span>Tee</span></div>
-            <div><strong>{player.handicap.handicapIndex.toFixed(1)}</strong><span>Handicap index</span></div>
-            <div><strong>{player.handicap.courseHandicap}</strong><span>Course handicap</span></div>
-            <div><strong>{player.handicap.playingHandicap}</strong><span>Playing handicap</span></div>
-            <div><strong>{player.handicap.strokesOff}</strong><span>Strokes off</span></div>
-          </div>
+          <dl className={styles.handicapGrid}>
+            <div>
+              <dt>Tee</dt>
+              <dd>{player.handicap.tee}</dd>
+            </div>
+            <div>
+              <dt>Handicap index</dt>
+              <dd>{player.handicap.handicapIndex.toFixed(1)}</dd>
+            </div>
+            <div>
+              <dt>Course handicap</dt>
+              <dd>{player.handicap.courseHandicap}</dd>
+            </div>
+            <div>
+              <dt>Playing handicap</dt>
+              <dd>{player.handicap.playingHandicap}</dd>
+            </div>
+            <div>
+              <dt>Strokes off</dt>
+              <dd>{player.handicap.strokesOff}</dd>
+            </div>
+          </dl>
         </section>
       ) : null}
 
-      <section className="profile-history section-shell">
-        <div className="section-header compact">
-          <div><p className="eyebrow">Tournament history</p><h2>Year by<br /><em>year.</em></h2></div>
-          <p>Verified appearances, teams, captain roles, and team championships currently in the Bourbon Bowl archive.</p>
+      <nav className={styles.pager} aria-label="Adjacent players">
+        <Link href={`/players/${prev.slug}`} className={styles.pagerLink}>
+          <small>Previous</small>
+          <strong>{playerLastName(prev.name)}</strong>
+          <Image src={prev.image} alt="" width={56} height={56} sizes="56px" />
+        </Link>
+        <Link href={`/players/${next.slug}`} className={`${styles.pagerLink} ${styles.pagerNext}`}>
+          <Image src={next.image} alt="" width={56} height={56} sizes="56px" />
+          <small>Next</small>
+          <strong>{playerLastName(next.name)}</strong>
+        </Link>
+      </nav>
+
+      <section className={`${styles.roster} section-shell`} aria-labelledby="roster-title">
+        <div className={styles.rosterHead}>
+          <p className="eyebrow">The field</p>
+          <h2 id="roster-title">More<br /><em>bios.</em></h2>
         </div>
-
-        <div className="profile-timeline">
-          {[2024, 2025, 2026].map((year, index) => {
-            const team = player.teams.find((entry) => entry.year === year);
-            const role = roles.find((entry) => entry.year === year);
-            const championship = championships.find((entry) => entry.year === year);
-
-            return (
-              <article key={year}>
-                <span>0{index + 1}</span>
-                <h3>{year}</h3>
+        <div className={styles.rosterGrid}>
+          {allPlayers
+            .filter((entry) => entry.slug !== player.slug)
+            .map((entry, index) => (
+              <Link href={`/players/${entry.slug}`} key={entry.slug} className={styles.rosterCard}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <Image src={entry.image} alt="" width={72} height={72} sizes="72px" />
                 <div>
-                  <small>{team ? "Competitor" : role ? "Captain" : "No appearance"}</small>
-                  <strong>{team?.name ?? role?.label ?? "—"}</strong>
-                  {role && team ? <p>{role.label}</p> : null}
+                  <strong>{entry.name}</strong>
+                  <small>
+                    {entry.years.length === 1 ? "01 Bowl" : `${String(entry.years.length).padStart(2, "0")} Bowls`}
+                    {entry.championships?.length ? " · Champion" : ""}
+                  </small>
                 </div>
-                {championship ? <b>Champion</b> : null}
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="profile-record section-shell">
-        <div className="section-header compact">
-          <div><p className="eyebrow">Career record</p><h2>The archive<br /><em>in progress.</em></h2></div>
-          <p>Individual match outcomes are still being reconstructed from the original scorecards.</p>
-        </div>
-
-        {player.highlights?.length ? (
-          <div className="profile-highlight">
-            <span>Known highlight</span>
-            <strong>{player.highlights[0]}</strong>
-          </div>
-        ) : null}
-
-        <div className="future-records">
-          <article><span>01</span><h3>Match record</h3><p>Wins, losses, and halves will appear as scorecards are verified.</p></article>
-          <article><span>02</span><h3>Partners & opponents</h3><p>Head-to-head history and favorite pairings are coming next.</p></article>
-          <article><span>03</span><h3>Awards & moments</h3><p>Photos, side awards, quotes, and trip lore will build over time.</p></article>
-        </div>
-      </section>
-
-      <section className="profile-directory section-shell" aria-labelledby="more-players">
-        <p className="eyebrow">Player index</p>
-        <h2 id="more-players">More profiles</h2>
-        <div>
-          {allPlayers.filter((entry) => entry.slug !== player.slug).map((entry) => (
-            <Link href={`/players/${entry.slug}`} key={entry.slug}>
-              <Image src={entry.image} alt="" width={54} height={54} sizes="54px" />
-              <span>{entry.name}</span>
-              <b aria-hidden="true">↗</b>
-            </Link>
-          ))}
+              </Link>
+            ))}
         </div>
       </section>
 

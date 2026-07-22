@@ -1,69 +1,707 @@
-.handicapCard {
+.page {
+  background: var(--paper);
+}
+
+/* —— Hero / team bio masthead —— */
+.hero {
+  min-height: calc(100svh - var(--header-h));
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  border-bottom: 1px solid var(--ink);
+  overflow: hidden;
+}
+
+.portrait {
+  position: relative;
+  min-height: 720px;
+  min-width: 0;
+  background: var(--rule);
+  border-right: 1px solid var(--ink);
+  overflow: hidden;
+}
+
+.portrait img {
+  object-fit: cover;
+  object-position: center top;
+  transform: scale(1.02);
+  transition: transform 1.1s cubic-bezier(.22, 1, .36, 1);
+}
+
+.hero:hover .portrait img {
+  transform: scale(1.05);
+}
+
+.identity {
+  min-width: 0;
+  padding: clamp(28px, 4vw, 56px) var(--gutter) clamp(40px, 5vw, 72px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 4vh, 48px);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--soft) 70%, transparent), transparent 40%),
+    var(--paper);
+}
+
+.identityTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.back {
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.back:hover,
+.back:focus-visible {
+  border-color: var(--acid);
+  outline: none;
+}
+
+.jersey {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.jersey span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.jersey strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 6vw, 72px);
+  font-weight: 400;
+  line-height: .8;
+  letter-spacing: -.05em;
+  padding: .05em .16em .1em;
+  background: var(--acid);
+}
+
+.nameBlock {
+  margin-top: auto;
+}
+
+.nameBlock :global(.eyebrow) {
+  margin-bottom: 18px;
+}
+
+.nameBlock h1 {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .02em;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(56px, 7.4vw, 128px);
+  font-weight: 400;
+  line-height: .84;
+  letter-spacing: -.07em;
+}
+
+.nameBlock h1 em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.deck {
+  max-width: 34ch;
+  margin: 22px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2.2vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.tags {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tags li {
+  padding: 10px 12px 8px;
+  border: 1px solid var(--ink);
+  background: var(--soft);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.tags li:first-child {
+  background: var(--acid);
+}
+
+.statline {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.statline > div {
+  padding: 18px 14px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-right: 1px solid var(--rule);
+}
+
+.statline > div + div {
+  padding-left: 14px;
+}
+
+.statline > div:last-child {
+  border-right: 0;
+}
+
+.statline dt {
+  order: 1;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.statline dd {
+  order: 0;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 400;
+  line-height: .8;
+  letter-spacing: -.05em;
+}
+
+/* —— Highlight band —— */
+.highlight {
+  padding: clamp(40px, 6vw, 72px) var(--gutter);
+  background: var(--ink);
+  color: var(--paper);
+  border-bottom: 1px solid var(--ink);
+}
+
+.highlight :global(.eyebrow) {
+  margin: 0 0 22px;
+  color: var(--acid);
+}
+
+.highlightText {
+  margin: 0;
+  max-width: 18ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 7vw, 96px);
+  font-weight: 400;
+  line-height: .92;
+  letter-spacing: -.05em;
+}
+
+.highlightText em {
+  font-style: italic;
+  padding: .05em .14em .08em;
+  background: var(--acid);
+  color: var(--ink);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* —— Seasons —— */
+.seasons {
+  background: var(--soft);
+}
+
+.seasonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  border-top: 1px solid var(--ink);
+}
+
+.seasonGrid article {
+  min-height: 280px;
+  padding: 28px 24px 26px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border-right: 1px solid var(--ink);
+}
+
+.seasonGrid article + article {
+  padding-left: 24px;
+}
+
+.seasonGrid article:last-child {
+  border-right: 0;
+}
+
+.seasonGrid header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seasonGrid header span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.seasonGrid h3 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(52px, 6vw, 88px);
+  font-weight: 400;
+  line-height: .8;
+  letter-spacing: -.06em;
+}
+
+.seasonBody {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teamName {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(24px, 2.6vw, 36px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+}
+
+.role {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.seasonGrid b {
+  align-self: flex-start;
+  padding: 10px 12px 8px;
+  background: var(--acid);
+  border: 1px solid var(--ink);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.mutedBadge {
+  background: transparent !important;
+  color: var(--muted);
+}
+
+.seasonWin .teamName {
+  padding: .04em .12em .08em;
+  background: var(--acid);
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* —— Handicap —— */
+.handicap {
   background: var(--acid);
   color: var(--ink);
 }
 
-.handicapCard :global(.eyebrow),
-.handicapCard :global(.section-header > p) {
+.handicap :global(.eyebrow),
+.handicap :global(.section-header > p) {
   color: var(--ink);
 }
 
 .handicapGrid {
+  margin: 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   border-top: 1px solid var(--ink);
-  border-left: 1px solid var(--ink);
 }
 
 .handicapGrid > div {
   min-width: 0;
-  min-height: 210px;
-  padding: 26px;
+  min-height: 180px;
+  padding: 22px 18px 20px 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 24px;
   border-right: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
 }
 
-.handicapGrid strong {
+.handicapGrid > div + div {
+  padding-left: 18px;
+}
+
+.handicapGrid > div:last-child {
+  border-right: 0;
+}
+
+.handicapGrid dt {
+  order: 1;
+  margin: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.handicapGrid dd {
+  order: 0;
+  margin: 0;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(44px, 5vw, 78px);
+  font-size: clamp(40px, 4.8vw, 72px);
   font-weight: 400;
   line-height: .85;
   letter-spacing: -.055em;
   overflow-wrap: anywhere;
 }
 
-.handicapGrid span {
-  font-size: 9px;
+/* —— Prev / next —— */
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--ink);
+}
+
+.pagerLink {
+  min-height: 120px;
+  padding: 28px var(--gutter);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 18px;
+  align-items: center;
+  border-right: 1px solid var(--ink);
+  transition: background .2s ease;
+}
+
+.pagerLink:last-child {
+  border-right: 0;
+}
+
+.pagerLink:hover,
+.pagerLink:focus-visible {
+  background: var(--acid);
+  outline: none;
+}
+
+.pagerLink small {
+  grid-column: 1;
+  font-size: 10px;
   font-weight: 800;
-  line-height: 1.35;
-  letter-spacing: .14em;
+  letter-spacing: .16em;
   text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pagerLink strong {
+  grid-column: 1;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 400;
+  letter-spacing: -.04em;
+  line-height: 1;
+}
+
+.pagerLink img {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  background: var(--rule);
+}
+
+.pagerNext {
+  grid-template-columns: auto 1fr;
+  justify-items: end;
+  text-align: right;
+}
+
+.pagerNext img {
+  grid-column: 1;
+}
+
+.pagerNext small,
+.pagerNext strong {
+  grid-column: 2;
+}
+
+/* —— Roster —— */
+.roster {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.rosterHead {
+  margin-bottom: clamp(40px, 6vw, 72px);
+}
+
+.rosterHead :global(.eyebrow) {
+  color: var(--acid);
+}
+
+.rosterHead h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(56px, 8vw, 120px);
+  font-weight: 400;
+  line-height: .82;
+  letter-spacing: -.065em;
+}
+
+.rosterHead h2 em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.rosterGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid #555851;
+}
+
+.rosterCard {
+  min-height: 96px;
+  padding: 16px 18px 16px 0;
+  display: grid;
+  grid-template-columns: 40px 72px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  border-bottom: 1px solid #555851;
+  transition: background .2s ease, padding .2s ease;
+}
+
+.rosterCard:nth-child(odd) {
+  border-right: 1px solid #555851;
+}
+
+.rosterCard:nth-child(even) {
+  padding-left: 18px;
+}
+
+.rosterCard:hover,
+.rosterCard:focus-visible {
+  background: var(--acid);
+  color: var(--ink);
+  outline: none;
+}
+
+.rosterCard span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  color: #a9aba4;
+}
+
+.rosterCard:hover span,
+.rosterCard:focus-visible span {
+  color: var(--ink);
+}
+
+.rosterCard img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  background: var(--rule);
+}
+
+.rosterCard strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 400;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+}
+
+.rosterCard small {
+  display: block;
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #a9aba4;
+}
+
+.rosterCard:hover small,
+.rosterCard:focus-visible small {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait img,
+  .hero:hover .portrait img {
+    transition: none;
+    transform: none;
+  }
 }
 
 @media (max-width: 1050px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .portrait {
+    min-height: auto;
+    aspect-ratio: 4 / 5;
+    max-height: 70svh;
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .identity {
+    padding-top: 40px;
+    padding-bottom: 56px;
+  }
+
+  .seasonGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .seasonGrid article,
+  .seasonGrid article + article {
+    min-height: 0;
+    padding: 28px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .seasonGrid article:last-child {
+    border-bottom: 0;
+  }
+
   .handicapGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .handicapGrid > div {
-    min-height: 170px;
+  .handicapGrid > div:nth-child(3) {
+    border-right: 0;
+  }
+
+  .handicapGrid > div:nth-child(n+4) {
+    border-top: 1px solid var(--ink);
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 860px) {
+  .portrait {
+    aspect-ratio: 1;
+    max-height: none;
+  }
+
+  .nameBlock h1 {
+    font-size: clamp(52px, 14vw, 88px);
+  }
+
+  .statline {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .statline > div {
+    min-width: 0;
+    padding: 16px 8px 14px 0;
+    gap: 14px;
+  }
+
+  .statline > div + div {
+    padding-left: 10px;
+  }
+
+  .statline dd {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+
+  .highlightText {
+    max-width: none;
+    font-size: clamp(32px, 10vw, 56px);
+  }
+
   .handicapGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .handicapGrid > div {
     min-height: 140px;
-    padding: 18px;
+    padding: 18px 12px 16px 0;
   }
 
-  .handicapGrid strong {
-    font-size: clamp(36px, 12vw, 54px);
+  .handicapGrid > div:nth-child(2n) {
+    border-right: 0;
+    padding-left: 12px;
+  }
+
+  .handicapGrid > div:nth-child(n+3) {
+    border-top: 1px solid var(--ink);
+  }
+
+  .pager {
+    grid-template-columns: 1fr;
+  }
+
+  .pagerLink {
+    border-right: 0;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .pagerLink:last-child {
+    border-bottom: 0;
+  }
+
+  .rosterGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .rosterCard,
+  .rosterCard:nth-child(even) {
+    padding-left: 0;
+  }
+
+  .rosterCard:nth-child(odd) {
+    border-right: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .tags li {
+    padding: 9px 10px 7px;
+    font-size: 9px;
+  }
+
+  .rosterCard {
+    grid-template-columns: 32px 56px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .rosterCard img {
+    width: 56px;
+    height: 56px;
   }
 }
