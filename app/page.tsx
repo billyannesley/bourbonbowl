@@ -20,7 +20,7 @@ type Round = {
 };
 
 const currentField: Player[] = [
-  { name: "Stephen Aitken", initials: "SA", years: [2024, 2025, 2026] },
+  { name: "Stephen Aitken", initials: "SA", years: [2024, 2025, 2026], note: "Hole-in-one · Sherman No. 5" },
   { name: "Billy Annesley", initials: "BA", years: [2024, 2025, 2026] },
   { name: "Doug Yass", initials: "DY", years: [2024, 2025, 2026] },
   { name: "Dirk Nicholas", initials: "DN", years: [2024, 2025, 2026] },
@@ -113,6 +113,7 @@ function ArrowIcon() {
 
 function MatchArchive({ year, rounds }: { year: number; rounds: Round[] }) {
   const is2024 = year === 2024;
+  const champion = is2024 ? "Flex Beans" : "Big Daddy’s";
 
   return (
     <article className="year-record" id={`year-${year}`}>
@@ -166,7 +167,10 @@ function MatchArchive({ year, rounds }: { year: number; rounds: Round[] }) {
         ))}
       </div>
 
-      <p className="pending-result"><span /> Match results awaiting archive</p>
+      <div className="archive-outcome">
+        <p className="champion"><span>Champion</span><strong>{champion}</strong></p>
+        <p className="pending-result"><span /> Match-by-match results awaiting archive</p>
+      </div>
     </article>
   );
 }
@@ -272,7 +276,7 @@ export default function Home() {
       <section className="records section-shell" id="records">
         <div className="section-header compact">
           <div><p className="eyebrow">At a glance</p><h2>The numbers<br /><em>so far.</em></h2></div>
-          <p>Verified from the original Year 1 and Year 2 match posters and the announced Year 3 field.</p>
+          <p>Verified from the original match posters, confirmed team winners, and the announced Year 3 field.</p>
         </div>
         <div className="record-grid">
           <div><strong>03</strong><span>Editions</span></div>
@@ -280,6 +284,14 @@ export default function Home() {
           <div><strong>16</strong><span>Scheduled matches</span></div>
           <div><strong>06</strong><span>Three-time players</span></div>
         </div>
+        <article className="ace-record">
+          <p className="eyebrow">Career highlight / 01</p>
+          <div>
+            <strong>Ace</strong>
+            <h3>Stephen Aitken</h3>
+            <p>Hole-in-one · Sherman No. 5</p>
+          </div>
+        </article>
       </section>
 
       <footer>
