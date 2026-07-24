@@ -30,7 +30,7 @@ export type ScheduleDay = {
   date: string;
   day: string;
   label: string;
-  route: string;
+  route: [from: string, to: string];
   teeTimes: { label: string; dateTime: string }[];
 };
 
@@ -109,7 +109,7 @@ export const schedule2026: ScheduleDay[] = [
     date: "2026-07-24",
     day: "Friday",
     label: "July 24",
-    route: "Meade → Grant",
+    route: ["Meade", "Grant"],
     teeTimes: [
       { label: "12:00 PM", dateTime: "2026-07-24T12:00" },
       { label: "12:10 PM", dateTime: "2026-07-24T12:10" },
@@ -119,7 +119,7 @@ export const schedule2026: ScheduleDay[] = [
     date: "2026-07-25",
     day: "Saturday",
     label: "July 25",
-    route: "Sherman → Grant",
+    route: ["Sherman", "Grant"],
     teeTimes: [
       { label: "11:00 AM", dateTime: "2026-07-25T11:00" },
       { label: "11:10 AM", dateTime: "2026-07-25T11:10" },

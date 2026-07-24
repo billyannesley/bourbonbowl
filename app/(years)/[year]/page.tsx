@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowIcon } from "../../components/arrow-icon";
+import { ArrowIcon, ForwardIcon } from "../../components/arrow-icon";
 import { SiteFooter } from "../../components/site-footer";
 import { SiteHeader } from "../../components/site-header";
 import { YearEdition } from "../../components/year-edition";
@@ -123,7 +123,11 @@ function Year2026Page() {
                     </div>
                     <p className="schedule-route">
                       <span>Routing</span>
-                      <strong>{schedule.route}</strong>
+                      <strong>
+                        {schedule.route[0]}
+                        <ForwardIcon />
+                        {schedule.route[1]}
+                      </strong>
                     </p>
                     <ol>
                       {schedule.teeTimes.map((teeTime) => (

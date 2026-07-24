@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BackIcon } from "../../components/arrow-icon";
 import { SiteFooter } from "../../components/site-footer";
 import { SiteHeader } from "../../components/site-header";
 import { allPlayers, getPlayerBySlug, playerLastName, players } from "../../../lib/players";
@@ -85,7 +86,7 @@ export default async function PlayerProfile({ params }: PlayerProfileProps) {
 
         <div className={styles.identity}>
           <div className={styles.identityTop}>
-            <Link className={styles.back} href="/players">← Field index</Link>
+            <Link className={styles.back} href="/players"><BackIcon /> Field index</Link>
             <p className={styles.jersey}>
               <span>No.</span>
               <strong>{String(rosterIndex + 1).padStart(2, "0")}</strong>

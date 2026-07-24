@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowIcon } from "../components/arrow-icon";
+import { ArrowIcon, ForwardIcon } from "../components/arrow-icon";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
 
@@ -27,7 +27,7 @@ export default function VenuePage() {
           </p>
         </div>
         <p className="section-cta">
-          <Link href="/2026">Year Three tee times →</Link>
+          <Link href="/2026">Year Three tee times <ForwardIcon /></Link>
         </p>
       </section>
 

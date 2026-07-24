@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowIcon } from "./components/arrow-icon";
+import { ArrowIcon, ForwardIcon } from "./components/arrow-icon";
 import { SiteFooter } from "./components/site-footer";
 import { SiteHeader } from "./components/site-header";
 import { editions } from "../lib/editions";
@@ -166,7 +166,7 @@ export default function Home() {
         </nav>
 
         <p className="section-cta">
-          <Link href="/history">Full history →</Link>
+          <Link href="/history">Full history <ForwardIcon /></Link>
         </p>
       </section>
 
@@ -206,7 +206,7 @@ export default function Home() {
           })}
         </div>
         <p className="section-cta">
-          <Link href="/players">All player bios →</Link>
+          <Link href="/players">All player bios <ForwardIcon /></Link>
         </p>
       </section>
 
@@ -237,7 +237,7 @@ export default function Home() {
         </article>
 
         <p className="section-cta">
-          <Link href="/records">Full records →</Link>
+          <Link href="/records">Full records <ForwardIcon /></Link>
         </p>
       </section>
 

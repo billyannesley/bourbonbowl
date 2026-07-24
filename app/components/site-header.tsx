@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 
 const navLinks = [
@@ -14,13 +14,8 @@ const navLinks = [
 ] as const;
 
 export function SiteHeader() {
-  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuId = useId();
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -76,11 +71,11 @@ export function SiteHeader() {
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="menu-toggle-bars" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
+        {open ? (
+          <X aria-hidden="true" focusable="false" size={22} strokeWidth={1.75} />
+        ) : (
+          <Menu aria-hidden="true" focusable="false" size={22} strokeWidth={1.75} />
+        )}
       </button>
 
       <div

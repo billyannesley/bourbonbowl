@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ForwardIcon } from "../components/arrow-icon";
 import { SiteFooter } from "../components/site-footer";
 import { SiteHeader } from "../components/site-header";
 import { YearEdition } from "../components/year-edition";
@@ -25,7 +26,7 @@ export default function HistoryPage() {
           <p>
             Two completed editions. Champions first, then the field, then every scheduled match —
             ready for scorecards when they surface.{" "}
-            <Link href="/2026">Year Three is underway →</Link>
+            <Link className="inline-icon-link" href="/2026">Year Three is underway <ForwardIcon /></Link>
           </p>
         </div>
 
